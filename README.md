@@ -4,8 +4,12 @@ Repozitorij z gradivi pri predmetu APPR v študijskem letu 2017/18
 
 ## Tematika
 
-Izbrali si boste temo, s katero se bo vaš projekt ukvarjal. Tukaj boste
-napisali, kje ste dobili podatke, ter kakšen je vaš cilj.
+Zaposljivost po končanem študiju v EU
+
+V svojem projektu bom analizirala, kolikšen delež študentov se je po končanem študiju zaposlil ter kako hitro so našli zaposlitev. To bom primerjala skozi leta 2000-2016. Podatke bom primerjala tudi po spolu, ter kako se stanje razlikuje v državah po Evropi. Tabele sem pridobila iz Eurostata v obliki CSV.
+
+Podatki:
+* http://ec.europa.eu/eurostat/statistics-explained/index.php/Employment_rates_of_recent_graduates
 
 ## Program
 
