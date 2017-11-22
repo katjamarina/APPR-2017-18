@@ -11,6 +11,15 @@ V svojem projektu bom analizirala, kolikšen delež študentov se je po končane
 Podatki:
 * http://ec.europa.eu/eurostat/statistics-explained/index.php/Employment_rates_of_recent_graduates
 
+1. tabela: 
+V prvem stolpcu bodo naštete države, vsebovala pa bo število in delež ljudi, ki so dokončali študij v letih 2000-2016.
+
+2. tabela: 
+Vsebovala bo podatke o deležu študentov, ki so se zaposlili v določenem letu 2000-2016. Prvi stolpec bodo države, naslednji pa leta.
+
+3. tabela: 
+V tej tabeli bodo podatki o deležu zaposlenih študentov glede na čas od zaključka študija. V prvem stolpcu bodo naštete države, v naslednjih pa leta.
+
 ## Program
 
 Glavni program in poročilo se nahajata v datoteki `projekt.Rmd`. Ko ga prevedemo,
