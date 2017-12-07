@@ -4,10 +4,10 @@ sl <- locale("sl", decimal_mark = ",", grouping_mark = ".")
 
 # Funkcija, ki uvozi občine iz Wikipedije
 uvozi.obcine <- function() {
-  link <- "http://sl.wikipedia.org/wiki/Seznam_ob%C4%8Din_v_Sloveniji"
+  link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
   stran <- html_session(link) %>% read_html()
-  tabela <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-    .[[1]] %>% html_table(dec = ",")
+  tabela <- stran %>% html_nodes(xpath="//table[@class='wikitable']") %>%
+    .[[6]] %>% html_table(dec = ",")
   for (i in 1:ncol(tabela)) {
     if (is.character(tabela[[i]])) {
       Encoding(tabela[[i]]) <- "UTF-8"
@@ -27,22 +27,16 @@ uvozi.obcine <- function() {
   return(tabela)
 }
 
-# Funkcija, ki uvozi podatke iz datoteke druzine.csv
-uvozi.druzine <- function(obcine) {
-  data <- read_csv2("podatki/druzine.csv", col_names = c("obcina", 1:4),
-                    locale = locale(encoding = "Windows-1250"))
-  data$obcina <- data$obcina %>% strapplyc("^([^/]*)") %>% unlist() %>%
-    strapplyc("([^ ]+)") %>% sapply(paste, collapse = " ") %>% unlist()
-  data$obcina[data$obcina == "Sveti Jurij"] <- "Sveti Jurij ob Ščavnici"
-  data <- data %>% melt(id.vars = "obcina", variable.name = "velikost.druzine",
-                        value.name = "stevilo.druzin")
-  data$velikost.druzine <- parse_number(data$velikost.druzine)
-  data$obcina <- factor(data$obcina, levels = obcine)
+# Funkcija, ki uvozi podatke iz datoteke uvozi.csv
+uvozi.gdp <- function() {
+  data <- read_csv("podatki/gdp.csv", na = ":",
+                    locale = locale(encoding = "UTF-8"))
+  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
   return(data)
 }
 
 # Zapišimo podatke v razpredelnico obcine
-obcine <- uvozi.obcine()
+gdp <- uvozi.gdp()
 
 # Zapišimo podatke v razpredelnico druzine.
 druzine <- uvozi.druzine(levels(obcine$obcina))
