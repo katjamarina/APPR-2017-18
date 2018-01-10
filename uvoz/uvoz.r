@@ -2,44 +2,136 @@
 
 sl <- locale("sl", decimal_mark = ",", grouping_mark = ".")
 
-# Funkcija, ki uvozi občine iz Wikipedije
-uvozi.obcine <- function() {
-  link <- "https://en.wikipedia.org/wiki/FIS_Alpine_Ski_World_Cup"
-  stran <- html_session(link) %>% read_html()
-  tabela <- stran %>% html_nodes(xpath="//table[@class='wikitable']") %>%
-    .[[6]] %>% html_table(dec = ",")
-  for (i in 1:ncol(tabela)) {
-    if (is.character(tabela[[i]])) {
-      Encoding(tabela[[i]]) <- "UTF-8"
-    }
-  }
-  colnames(tabela) <- c("obcina", "povrsina", "prebivalci", "gostota", "naselja",
-                        "ustanovitev", "pokrajina", "regija", "odcepitev")
-  tabela$obcina <- gsub("Slovenskih", "Slov.", tabela$obcina)
-  tabela$obcina[tabela$obcina == "Kanal ob Soči"] <- "Kanal"
-  tabela$obcina[tabela$obcina == "Loški potok"] <- "Loški Potok"
-  for (col in c("povrsina", "prebivalci", "gostota", "naselja", "ustanovitev")) {
-    tabela[[col]] <- parse_number(tabela[[col]], na = "-", locale = sl)
-  }
-  for (col in c("obcina", "pokrajina", "regija")) {
-    tabela[[col]] <- factor(tabela[[col]])
-  }
-  return(tabela)
-}
+#vektor, ki spremeni imena držav v slo
+drzave.slo <- c(
+  "Austria" = "Avstrija",
+  "Belgium" = "Belgija",
+  "Denmark" = "Danska",
+  "Estonia" = "Estonija",
+  "Switzerland" = "Švica",
+  "France" = "Francija",
+  "Italy" = "Italija",
+  "Liechtenstein" = "Lihtenštajn",
+  "Sweden" = "Švedska",
+  "Luxembourg" = "Luksemburg",
+  "Norway" = "Norveška",
+  "Croatia" = "Hrvaška",
+  "Germany" = "Nemčija",
+  "Slovenia" = "Slovenija",
+  "Portugal" = "Portugalska",
+  "Romania" = "Romunija",
+  "United Kingdom" = "Združeno kraljestvo",
+  "Montenegro" = "Črna Gora",
+  "Turkey" = "Turčija",
+  "Australia" = "Avstralija",
+  "Bulgaria" = "Bolgarija",
+  "Greece" = "Grčija",
+  "Cyprus" = "Ciper",
+  "Hungary" = "Madžarska",
+  "Malta" = "Malta",
+  "Poland" = "Poljska",
+  "Czechoslovakia" = "Češkoslovaška",
+  "Spain" = "Španija",
+  "Latvia" = "Latvija",
+  "Lithuania" = "Litva",
+  "Finland" = "Finska",
+  "Ireland" = "Irska",
+  "Iceland" = "Islandija",
+  "Russia" = "Rusija",
+  "Slovakia" = "Slovaška",
+  "Netherlands" = "Nizozemska",
+  "Czech Republic" = "Češka",
+  "Former Yugoslav Republic of Macedonia" = "Makedonija"
+)
 
-# Funkcija, ki uvozi podatke iz datoteke uvozi.csv
+# Funkcija, ki uvozi podatke iz datoteke uvozi.gdp
 uvozi.gdp <- function() {
   data <- read_csv("podatki/gdp.csv", na = ":",
                     locale = locale(encoding = "UTF-8"))
   data$GEO <- gsub("Germany.*", "Germany", data$GEO)
+  data$UNIT <- gsub("Percentage.*", "Bruto domači proizvod (BDP)", data$UNIT)
   return(data)
 }
 
-# Zapišimo podatke v razpredelnico obcine
+#zapisimo podatke v razpredelnico gdp
 gdp <- uvozi.gdp()
+gdp <- gdp[ , -c(4:6)]
+colnames(gdp) <- c("leto", "drzava", "enota", "delez")
+gdp.slo <- gdp %>% mutate(drzava = drzave.slo[drzava])
 
-# Zapišimo podatke v razpredelnico druzine.
-druzine <- uvozi.druzine(levels(obcine$obcina))
+
+#uvozimo tabelo s procenti moskih, ki so nasli zaposlitev
+uvozi.procenti_moskih <- function() {
+  data <- read_csv("podatki/procenti_moski.csv", na = ":",
+                   locale = locale(encoding = "UTF-8"))
+  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
+  data$GEO <- gsub("Former.*", "Former Yugoslav Republic of Macedonia", data$GEO)
+  data$SEX <- gsub("Males", "M", data$SEX)
+  data$AGE <- gsub("From 20 to 34 years", "20-34", data$AGE)
+  data$DURATION <- gsub("5 years or less", "5 let ali manj", data$DURATION)
+  return(data)
+}
+
+#zapisimo podatke v tabelo procenti_moskih
+procenti_moskih <- uvozi.procenti_moskih()
+procenti_moskih <- procenti_moskih[ , -c(4, 7)]
+
+#uvozimo tabelo s procenti zensk, ki so nasle zaposlitev
+uvozi.procenti_zensk <- function() {
+  data <- read_csv("podatki/procenti_zenske.csv", na = ":",
+                   locale = locale(encoding = "UTF-8"))
+  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
+  data$GEO <- gsub("Former.*", "Former Yugoslav Republic of Macedonia", data$GEO)
+  data$SEX <- gsub("Females", "Z", data$SEX)
+  data$AGE <- gsub("From 20 to 34 years", "20-34", data$AGE)
+  data$DURATION <- gsub("5 years or less", "5 let ali manj", data$DURATION)
+  return(data)
+}
+
+#zapisimo podatke v tabelo procenti_zensk
+procenti_zensk <- uvozi.procenti_zensk()
+procenti_zensk <- procenti_zensk[ , -c(4, 7)]
+
+#zberemo podatke M/Z v eno tabelo
+procenti <- rbind(procenti_moskih, procenti_zensk)
+colnames(procenti) <- c("leto", "drzava", "trajanje", "starost", "spol", "delez")
+procenti.slo <- procenti %>% mutate(drzava = drzave.slo[drzava])
+
+uvozi.trajanje1 <- function() {
+  data <- read_csv("podatki/manj3.csv", na = ":",
+                   locale = locale(encoding = "UTF-8"))
+  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
+  data$GEO <- gsub("Former.*", "Former Yugoslav Republic of Macedonia", data$GEO)
+  data$AGE <- gsub("From 20 to 34 years", "20-34", data$AGE)
+  data$DURATION <- gsub("3.*", "Manj kot 3 leta", data$DURATION)
+  data$DURATION <- gsub("Over.*", "Več kot 3 leta", data$DURATION)
+  return(data)
+}
+
+#uvozimo v tabelo
+manj3 <-uvozi.trajanje1()
+
+uvozi.trajanje2 <- function() {
+  data <- read_csv("podatki/3alivec.csv", na = ":",
+                   locale = locale(encoding = "UTF-8"))
+  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
+  data$GEO <- gsub("Former.*", "Former Yugoslav Republic of Macedonia", data$GEO)
+  data$AGE <- gsub("From 20 to 34 years", "20-34", data$AGE)
+  data$DURATION <- gsub("3.*", "Manj kot 3 leta", data$DURATION)
+  data$DURATION <- gsub("Over.*", "Več kot 3 leta", data$DURATION)
+  return(data)
+}
+
+#uvozimo v tabelo
+vec3 <- uvozi.trajanje2()
+
+#zdruzimo podatke o trajanju iskanja zaposlitve v eno tabelo
+trajanje <- rbind(manj3, vec3)
+trajanje <- trajanje[, -c(4, 6, 7)]
+colnames(trajanje) <- c("leto", "drzava", "trajanje", "starost", "delez")
+trajanje <- trajanje %>% mutate(leto) %>% arrange(leto, drzava)
+#spremenimo v slo drzave
+trajanje.slo <- trajanje %>% mutate(drzava = drzave.slo[drzava])
 
 # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
 # potrebovali v 3. fazi, bi bilo smiselno funkcije dati v svojo
