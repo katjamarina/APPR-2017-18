@@ -95,6 +95,7 @@ procenti_zensk <- procenti_zensk[ , -c(4, 7)]
 #zberemo podatke M/Z v eno tabelo
 procenti <- rbind(procenti_moskih, procenti_zensk)
 colnames(procenti) <- c("leto", "drzava", "trajanje", "starost", "spol", "delez")
+procenti <- procenti %>% mutate(leto) %>% arrange(leto, drzava)
 procenti.slo <- procenti %>% mutate(drzava = drzave.slo[drzava])
 
 uvozi.trajanje1 <- function() {
