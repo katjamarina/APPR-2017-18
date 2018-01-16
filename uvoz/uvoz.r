@@ -65,36 +65,35 @@ uvozi.procenti_moskih <- function() {
   data <- read_csv("podatki/procenti_moski.csv", na = ":",
                    locale = locale(encoding = "UTF-8"))
   data$GEO <- gsub("Germany.*", "Germany", data$GEO)
-  data$GEO <- gsub("Former.*", "Former Yugoslav Republic of Macedonia", data$GEO)
+  data$GEO <- gsub("Former.*", "Macedonia", data$GEO)
   data$SEX <- gsub("Males", "M", data$SEX)
   data$AGE <- gsub("From 20 to 34 years", "20-34", data$AGE)
-  data$DURATION <- gsub("5 years or less", "5 let ali manj", data$DURATION)
   return(data)
 }
 
 #zapisimo podatke v tabelo procenti_moskih
 procenti_moskih <- uvozi.procenti_moskih()
-procenti_moskih <- procenti_moskih[ , -c(4, 7)]
+procenti_moskih <- procenti_moskih[ , -c(3, 4, 7)]
+colnames(procenti_moskih) <- c("leto", "drzava", "starost", "spol", "delez")
 
 #uvozimo tabelo s procenti zensk, ki so nasle zaposlitev
 uvozi.procenti_zensk <- function() {
   data <- read_csv("podatki/procenti_zenske.csv", na = ":",
                    locale = locale(encoding = "UTF-8"))
   data$GEO <- gsub("Germany.*", "Germany", data$GEO)
-  data$GEO <- gsub("Former.*", "Former Yugoslav Republic of Macedonia", data$GEO)
+  data$GEO <- gsub("Former.*", "Macedonia", data$GEO)
   data$SEX <- gsub("Females", "Z", data$SEX)
   data$AGE <- gsub("From 20 to 34 years", "20-34", data$AGE)
-  data$DURATION <- gsub("5 years or less", "5 let ali manj", data$DURATION)
   return(data)
 }
 
 #zapisimo podatke v tabelo procenti_zensk
 procenti_zensk <- uvozi.procenti_zensk()
-procenti_zensk <- procenti_zensk[ , -c(4, 7)]
+procenti_zensk <- procenti_zensk[ , -c(3, 4, 7)]
+colnames(procenti_zensk) <- c("leto", "drzava", "starost", "spol", "delez")
 
 #zberemo podatke M/Z v eno tabelo
-procenti <- rbind(procenti_moskih, procenti_zensk)
-colnames(procenti) <- c("leto", "drzava", "trajanje", "starost", "spol", "delez")
+procenti <- rbind(procenti_moskih, procenti_zensk) %>% na.omit(procenti)
 procenti <- procenti %>% mutate(leto) %>% arrange(leto, drzava)
 procenti.slo <- procenti %>% mutate(drzava = drzave.slo[drzava])
 
@@ -102,7 +101,7 @@ uvozi.trajanje1 <- function() {
   data <- read_csv("podatki/manj3.csv", na = ":",
                    locale = locale(encoding = "UTF-8"))
   data$GEO <- gsub("Germany.*", "Germany", data$GEO)
-  data$GEO <- gsub("Former.*", "Former Yugoslav Republic of Macedonia", data$GEO)
+  data$GEO <- gsub("Former.*", "Macedonia", data$GEO)
   data$AGE <- gsub("From 20 to 34 years", "20-34", data$AGE)
   data$DURATION <- gsub("3.*", "Manj kot 3 leta", data$DURATION)
   data$DURATION <- gsub("Over.*", "Več kot 3 leta", data$DURATION)
@@ -116,7 +115,7 @@ uvozi.trajanje2 <- function() {
   data <- read_csv("podatki/3alivec.csv", na = ":",
                    locale = locale(encoding = "UTF-8"))
   data$GEO <- gsub("Germany.*", "Germany", data$GEO)
-  data$GEO <- gsub("Former.*", "Former Yugoslav Republic of Macedonia", data$GEO)
+  data$GEO <- gsub("Former.*", "Macedonia", data$GEO)
   data$AGE <- gsub("From 20 to 34 years", "20-34", data$AGE)
   data$DURATION <- gsub("3.*", "Manj kot 3 leta", data$DURATION)
   data$DURATION <- gsub("Over.*", "Več kot 3 leta", data$DURATION)
@@ -133,6 +132,7 @@ colnames(trajanje) <- c("leto", "drzava", "trajanje", "starost", "delez")
 trajanje <- trajanje %>% mutate(leto) %>% arrange(leto, drzava)
 #spremenimo v slo drzave
 trajanje.slo <- trajanje %>% mutate(drzava = drzave.slo[drzava])
+
 
 # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
 # potrebovali v 3. fazi, bi bilo smiselno funkcije dati v svojo
