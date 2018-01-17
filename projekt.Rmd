@@ -21,7 +21,7 @@ source("lib/libraries.r", encoding = "UTF-8")
 
 # Izbira teme
 
-Odločila sem se, da analiziram zaposlovanje študentov po končanem študiju. Za to temo sem se odločila, ker me zanima, kako težko oziroma lahko je najti zaposlitev in kako na to vplivjo različni dejavniki, kot je spol in pa investiranje posamezne evropske države v terciarno izobraževanje. Zdi se mi, da bo analiza poazala, da je zaposlenih več moških, ter da investiranje države pripomore k lažji zaposlitvi. Starost ljudi sem omejila na 20-34 let.
+Odločila sem se, da analiziram zaposlovanje študentov po končanem študiju. Za to temo sem se odločila, ker me zanima, kako težko oziroma lahko je najti zaposlitev in kako na to vplivajo različni dejavniki, kot je spol in pa investiranje posamezne evropske države v terciarno izobraževanje. Zdi se mi, da bo analiza pokazala, da prej zaposlijo moške kot ženske, ter da investiranje države pripomore k lažji zaposlitvi. Starost ljudi sem omejila na 20-34 let.
 
 ***
 
@@ -89,7 +89,7 @@ Tretji graf je prav tako sestavljen iz dveh. V prvem črtnem grafu sem prikazala
 ```{r graf3, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 print(graf3)
 ``` 
-***
+
 
 Odločila sem se, da v 1. zemljevidu pokažem delež zaposlenih moških po končanem študiju, ki so potrebovali 5 let ali manj, da so se zaposlili.Tu sem se osredotočila na leto 2016, torej le zadnje trende, iz katerih si lažje predstavljamo trende v prihodnosti.Najsvetleje obarvane države imajo najvišji delež, to pa so države bolj na severu Evrope. Te veljajo za bolj razvite, kar pa se seveda pozna tudi pri zaposljivosti. Države na Balkanu imajo malo slabše razmere, čeprav pa nimam podatkov za vse države, lahko sklepam, da so tudi tam deleži podobni. Najslabša med njimi je Črna Gora.
 
