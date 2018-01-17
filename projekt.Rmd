@@ -1,6 +1,7 @@
 ---
 title: "Poročilo pri predmetu Analiza podatkov s programom R"
-author: "Študent FMF"
+subtitle: "Zaposljivost po končanem študiju v Evropi"
+author: "Katja Marina"
 output:
   html_document: default
   pdf_document:
@@ -9,7 +10,7 @@ output:
     latex_engine: xelatex
 ---
 
-```{r setup, echo=FALSE, results='hide', message=FALSE}
+```{r setup, echo=FALSE, results='hide', warning=FALSE, message= FALSE}
 # Če želimo nastaviti pisave v PDF-ju, odkomentiramo
 # in sledimo navodilom v programu.
 #source("fontconfig.r", encoding = "UTF-8")
@@ -20,83 +21,86 @@ source("lib/libraries.r", encoding = "UTF-8")
 
 # Izbira teme
 
-Za vzorec bomo prikazali nekaj podatkov o slovenskih občinah.
+Odločila sem se, da analiziram zaposlovanje študentov po končanem študiju. Za to temo sem se odločila, ker me zanima, kako težko oziroma lahko je najti zaposlitev in kako na to vplivjo različni dejavniki, kot je spol in pa investiranje posamezne evropske države v terciarno izobraževanje. Zdi se mi, da bo analiza poazala, da je zaposlenih več moških, ter da investiranje države pripomore k lažji zaposlitvi. Starost ljudi sem omejila na 20-34 let.
 
 ***
 
 # Obdelava, uvoz in čiščenje podatkov
 
-```{r uvoz, echo=FALSE, message=FALSE}
+```{r uvoz, echo=FALSE, message=FALSE, warning=FALSE}
 source("uvoz/uvoz.r", encoding = "UTF-8")
 ```
 
-Uvozili smo podatke o občinah v obliki CSV s statističnega urada ter v obliki HTML
-z Wikipedije. Podatke imamo v dveh razpredelnicah v obliki *tidy data*.
+Podatke o zaposlitvi sem uvozila v obliki CSV iz Eurostata, ki jih imam v treh razpredelnicah v obliki *tidy data*. 
 
-1. `druzine` - podatki o družinah za vsako občino
-  - `obcina` - spremenljivka: ime občine (neurejen faktor),
-  - `velikost.druzine` - spremenljivka: število otrok v družini (število: 1, 2, 3 ali 4, kjer zadnja vrednost pomeni 4 ali več),
-  - `stevilo.druzin` - meritev: število družin z ustreznim številom otrok v ustrezni občini (število).
-
-2. `obcine` - podatki o občinah
-  - `obcina` - spremenljivka: ime občine (neurejen faktor),
-  - `povrsina` - meritev: površina občine v km$^2$ (število),
-  - `prebivalci` - meritev: prebivalstvo občine (število),
-  - `gostota` - meritev: število prebivalcev na km$^2$ (število),
-  - `naselja` - meritev: število naselij v občini (število),
-  - `ustanovitev` - meritev: leto ustanovitve občine (število),
-  - `pokrajina` - meritev: pokrajina, ki ji občina pripada (neurejen faktor),
-  - `regija` - meritev: regija, ki ji občina pripada (neurejen faktor),
-  - `odcepitev` - meritev: podatki o občinah, od katerih se je občina odcepila (besedilo).
-
-**Opomba**: da bi razpredelnica `obcine` res bila v obliki *tidy data*, bi morali odstraniti stolpec `gostota` (saj je izpeljan iz stolpcev `povrsina` in `prebivalci`), podatke o pokrajinah pa bi morali premakniti v drugo razpredelnico, saj nekatere občine pripadajo dvema pokrajinama. Podobno bi morali narediti tudi s stolpcem `odcepitev`.
-
-Spodnji graf prikazuje porazdelitev števila naselij v občinah.
-
-```{r histogram, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Histogram števila naselij v občinah'}
-ggplot(obcine, aes(x = naselja)) + geom_histogram() +
-  ggtitle("Pogostost števila naselij") + xlab("Število naselij") + ylab("Število občin")
+1. [tabela](http://appsso.eurostat.ec.europa.eu/nui/show.do?query=BOOKMARK_DS-471197_QID_5A0B07B7_UID_-3F171EB0&layout=TIME,C,X,0;GEO,L,Y,0;UNIT,L,Z,0;SECTOR,L,Z,1;COFOG99,L,Z,2;NA_ITEM,L,Z,3;INDICATORS,C,Z,4;&zSelection=DS-471197UNIT,MIO_EUR;DS-471197COFOG99,TOTAL;DS-471197SECTOR,S13;DS-471197INDICATORS,OBS_FLAG;DS-471197NA_ITEM,TE;&rankName1=UNIT_1_2_-1_2&rankName2=SECTOR_1_2_-1_2&rankName3=INDICATORS_1_2_-1_2&rankName4=NA-ITEM_1_2_-1_2&rankName5=COFOG99_1_2_-1_2&rankName6=TIME_1_0_0_0&rankName7=GEO_1_2_0_1&sortC=ASC_-1_FIRST&rStp=&cStp=&rDCh=&cDCh=&rDM=true&cDM=true&footnes=false&empty=false&wai=false&time_mode=FIXED&time_most_recent=false&lang=EN&cfo=%23%23%23%2C%23%23%23.%23%23%23&lang=en): 
+  `bdp.slo` - podatki o BDP-ju za vsako državo po letih 2000-2016
+  - `leto` - spremenljivka: leto (integer: 2000-2016),
+  - `drzava` - spremenljivka: evropska država (character: države v Evropi),
+  - `delez` - meritev: delež BDP-ja, porabljen za visokošolstvo (numeric).
+  
+```{r bdp.slo, echo=FALSE, message=FALSE, warning=FALSE}
+kable(head(bdp.slo), align="ccc")
 ```
 
-***
+2. [tabela](http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=edat_lfse_24&lang=en)
+  `procenti.slo` - podatki o deležu zaposlenih po končanem šolanju, ki so se zaposlili po manj kot petih letih
+  - `leto` - spremenljivka: leto (integer: 2000-2016),
+  - `drzava` - spremenljivka: evropska država (character: države v Evropi),
+  - `starost` - spremenljivka: starost 20-34 (integer),
+  - `spol` - spremenljivka: moški(M) ali ženski(Z) (character),
+  - `delez` - meritev: delež zaposlenih po končanem študiju (numeric).
+
+```{r procenti.slo, echo=FALSE, message=FALSE, warning=FALSE}
+kable(head(procenti.slo), align="ccccc")
+```
+
+3. [tabela](http://ec.europa.eu/eurostat/tgm/table.do?tab=table&init=1&language=en&pcode=tps00053&plugin=1)
+  `trajanje.slo` - podatki o deležu zaposlenih glede na trajanje iskanja zaposlitve (manj kot tri leta ali več kot tri leta)
+  - `leto` - spremenljivka: leto (integer: 2000-2016),
+  - `drzava` - spremenljivka: evropska država (character: države v Evropi),
+  - `trajanje` - spremenljivka: manj kot 3 leta ali manj kot tri leta (character)
+  - `starost` - spremenljivka: starost 20-34 (integer),
+  - `delez` - meritev: delež zaposlenih glede na trajanje iskanja zaposlitve(numeric)
+
+```{r trajanje.slo, echo=FALSE, message=FALSE, warning=FALSE}
+kable(head(trajanje.slo), align="ccccc")
+```
+
 
 # Analiza in vizualizacija podatkov
 
 ```{r vizualizacija, echo=FALSE, message=FALSE, warning=FALSE}
 source("vizualizacija/vizualizacija.r", encoding = "UTF-8")
 ```
+Prvi črtni graf prikazuje delež BDP, ki ga država investira iz javnega sektorja v visokošolstvo. Zaradi preobsežnosti podatkov (veliko držav), ki bi bili nepregledni na grafu, sem se odločila, da narišem le podatke o 9 državah, nekatere bolj uspešne in nekatere manj uspešne. Med njimi je tudi Slovenija.Ta graf sem vključila, da je bolj razvidno, katere države bolj vlagajo v visokošolstvo, med njimi pa je očitno Švedska tista, ki investira največ. Po tem bi lahko sklepali, da bo imela kar visok delež zaposlenih po koncu študija, to pa bomo videli v naslednjih grafih.
 
-Spodnji zemljevid prikazuje povprečno velikost družine za vsako občino.
+```{r graf1, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+print(graf1)
+```
 
-```{r zemljevid, echo=FALSE, fig.align='center', fig.cap='Zemljevid povprečnega števila otrok v družini'}
-ggplot() + geom_polygon(data = left_join(zemljevid, povprecja, by = c("OB_UIME" = "obcina")),
-                        aes(x = long, y = lat, group = group, fill = povprecje)) +
-  ggtitle("Povprečno število otrok v družini") + xlab("") + ylab("") +
-  guides(fill = guide_colorbar(title = "Povprečje"))
+Drugi graf, ki je sestavljen iz dveh črtnih grafov prikazuje odstotek študentov, ki se zaposli kmalu po končanem študiju. Dva grafa sem združila zato, da se lažje primerja razliko med zaposlitvijo žensk in zaposlitvijo moških. Podatki so omejeni na izbranih 9 držav. Kot sem pričakovala, je iz grafa očitno, da so deleži zaposlenih moških višji kot pri ženskah.Največja izjema pa se mi zdi Hrvaška leta 2013, kjer so procenti v prid ženskam. Najslabšo zaposljivost ima definitivno Grčija, predvidevam da zaradi krize, ki jih je prizadela, najslabše je bilo leta 2013.Vidi se, da največ ljudi lažje dobi delo v Nemčiji.
+
+```{r graf2, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+print(graf2)
+```
+Tretji graf je prav tako sestavljen iz dveh. V prvem črtnem grafu sem prikazala delež tistih, ki so se zaposlili do največ treh let po končanem študiju, v drugem pa delež tistih, ki so potrebovali več kot tri leta. Tudi tu sem podatke omejila na 9 izbranih evropskih držav. Med grafoma je kar precej razlike, saj so deleži veliko višji v drugem, torej ko so ljudje doštudirali 3 ali več let nazaj, kar je dokaj smiselno. Presenetilo pa me je, da je Slovenija v drugem grafu kar visoko, še vedno pa je najbolj uspešna Nemčija, in pa tudi Švedska, kar se pričakovala že, ko sem v 1. grafu analizirala BDP.
+
+```{r graf3, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+print(graf3)
+``` 
+***
+
+Odločila sem se, da v 1. zemljevidu pokažem delež zaposlenih moških po končanem študiju, ki so potrebovali 5 let ali manj, da so se zaposlili.Tu sem se osredotočila na leto 2016, torej le zadnje trende, iz katerih si lažje predstavljamo trende v prihodnosti.Najsvetleje obarvane države imajo najvišji delež, to pa so države bolj na severu Evrope. Te veljajo za bolj razvite, kar pa se seveda pozna tudi pri zaposljivosti. Države na Balkanu imajo malo slabše razmere, čeprav pa nimam podatkov za vse države, lahko sklepam, da so tudi tam deleži podobni. Najslabša med njimi je Črna Gora.
+
+```{r zemljevid.delezM, echo=FALSE, fig.align='center'}
+print(zemljevid.delezM)
+```
+
+2. zemljevid je podoben, le da so namesto podatkov o moških, podatki o ženskah.Če primerjamo zemljevida, vidimo, da je med moškimi in ženskami velika razlika, kar sem ugotovila že v grafu, vendar je v zemljevidu bolj opazno. Precej razlike je v Grčiji in Turčiji, pa tudi na Finskem.
+
+```{r zemljevid.delezZ, echo=FALSE, warning=FALSE, fig.align='center'}
+print(zemljevid.delezZ)
 ```
 
 ***
-
-# Napredna analiza podatkov
-
-```{r analiza, echo=FALSE, message=FALSE}
-source("analiza/analiza.r", encoding = "UTF-8")
-```
-
-Spodnji graf prikazuje povezavo med številom naselij in površino občine.
-
-```{r graf, echo=FALSE, fig.align='center', fig.cap='Povezava med številom naselij in površino občine'}
-ggplot(inner_join(obcine, data.frame(obcina = names(skupine),
-                                     skupina = factor(skupine)), by = "obcina")
-, aes(x = povrsina, y = naselja, color = skupina, size = prebivalci/1000)) + geom_point() +
-  ggtitle("Število naselij glede na površino občine") +
-  xlab(expression("Površina (km"^2 * ")")) + ylab("Št. naselij") +
-  guides(color = guide_legend(title = "Skupina"),
-         size = guide_legend(title = "Prebivalci (* 1000)"))
-```
-
-***
-
-```{r shiny, echo = FALSE}
-shinyAppDir("shiny", options=list(width="100%", height=600))
-```

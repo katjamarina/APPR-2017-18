@@ -45,7 +45,7 @@ drzave.slo <- c(
 )
 
 # Funkcija, ki uvozi podatke iz datoteke uvozi.gdp
-uvozi.gdp <- function() {
+uvozi.bdp <- function() {
   data <- read_csv("podatki/gdp.csv", na = ":",
                     locale = locale(encoding = "UTF-8"))
   data$GEO <- gsub("Germany.*", "Germany", data$GEO)
@@ -54,10 +54,10 @@ uvozi.gdp <- function() {
 }
 
 #zapisimo podatke v razpredelnico gdp
-gdp <- uvozi.gdp()
-gdp <- gdp[ , -c(4:6)]
-colnames(gdp) <- c("leto", "drzava", "enota", "delez")
-gdp.slo <- gdp %>% mutate(drzava = drzave.slo[drzava])
+bdp <- uvozi.bdp()
+bdp <- bdp[ , -c(3:6)]
+colnames(bdp) <- c("leto", "drzava", "delez")
+bdp.slo <- bdp %>% mutate(drzava = drzave.slo[drzava])
 
 
 #uvozimo tabelo s procenti moskih, ki so nasli zaposlitev

@@ -2,7 +2,7 @@
 
 #Uvozimo grafe
 
-graf1 <- ggplot(gdp.slo %>% filter(drzava %in% c("Nemčija", "Slovenija", "Švedska", "Italija", "Francija", "Švica", "Češka", "Grčija", "Hrvaška")), 
+graf1 <- ggplot(bdp.slo %>% filter(drzava %in% c("Nemčija", "Slovenija", "Švedska", "Italija", "Francija", "Združeno kraljestvo", "Češka", "Grčija", "Hrvaška")), 
                 aes(x = leto, y = delez, color = drzava)) +
   geom_line(size = 1) +
   geom_point(size = 1.5) +
@@ -12,12 +12,14 @@ graf1 <- ggplot(gdp.slo %>% filter(drzava %in% c("Nemčija", "Slovenija", "Šved
         panel.grid.minor = element_line(linetype = "dotted")) + 
   ggtitle("Delež BDP porabljen za terciarno izobraževanje")
 
-graf2 <- ggplot(procenti %>% filter(drzava %in% c("Germany", "Slovenia", "Sweden", "Italy", "France", "Switzerland", "Czech Republic", "Greece", "Croatia")),
+graf2 <- ggplot(procenti.slo %>% filter(drzava %in% c("Nemčija", "Slovenija", "Švedska", "Italija", "Francija", "Združeno kraljestvo", "Češka", "Grčija", "Hrvaška")),
        aes(x = leto, y = delez, color = drzava)) + geom_line() + geom_point() +
+  ggtitle("Delež zaposlitve po končanem študiju v odvisnosti od M/Z") + 
   facet_grid(~ spol)
 
-graf3 <- ggplot(trajanje %>% filter(drzava %in% c("Germany", "Slovenia", "Sweden", "Italy", "France", "Switzerland", "Czech Republic", "Greece", "Croatia")),
+graf3 <- ggplot(trajanje.slo %>% filter(drzava %in% c("Nemčija", "Slovenija", "Švedska", "Italija", "Francija", "Združeno kraljestvo", "Češka", "Grčija", "Hrvaška")),
                 aes(x = leto, y = delez, color = drzava)) + geom_line() + geom_point() +
+  ggtitle("Delež zaposlitve v odvisnosti od trajanja iskanja zaposlitve po študiju") +
   facet_grid(~ trajanje)
 
 #Uvozimo zemljevid
@@ -32,12 +34,12 @@ zemljevid.delezM <- ggplot() +
                  right_join(zemljevid, by = c("drzava" = "NAME_LONG")),
                aes(x = long, y = lat, group = group, fill = delez)) +
   coord_cartesian(xlim = c(-22, 40), ylim = c(30, 70)) +
-  ggtitle("Delež zaposlenih žensk po študiju")
+  ggtitle("Zemljevid deleža zaposlenih moških po končanem študiju leta 2016")
 
 zemljevid.delezZ <- ggplot() +
   geom_polygon(data = procenti %>% filter(spol == "Z", leto == 2016) %>%
                  right_join(zemljevid, by = c("drzava" = "NAME_LONG")),
                aes(x = long, y = lat, group = group, fill = delez)) +
   coord_cartesian(xlim = c(-22, 40), ylim = c(30, 70)) +
-  ggtitle("Delež zaposlenih moških po študiju")
+  ggtitle("Zemljevid deleža zaposlenih žensk po končanem študiju leta 2016")
 
