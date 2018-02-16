@@ -24,6 +24,13 @@ source("lib/libraries.r", encoding = "UTF-8")
 Odločila sem se, da analiziram zaposlovanje študentov po končanem študiju. Za to temo sem se odločila, ker me zanima, kako težko oziroma lahko je najti zaposlitev in kako na to vplivajo različni dejavniki, kot je spol in pa investiranje posamezne evropske države v terciarno izobraževanje. Zdi se mi, da bo analiza pokazala, da prej zaposlijo moške kot ženske, ter da investiranje države pripomore k lažji zaposlitvi. Starost ljudi sem omejila na 20-34 let.
 
 ***
+<center>
+
+![](slike/zap.jpg)
+
+</center>
+
+***
 
 # Obdelava, uvoz in čiščenje podatkov
 
@@ -102,5 +109,11 @@ print(zemljevid.delezM)
 ```{r zemljevid.delezZ, echo=FALSE, warning=FALSE, fig.align='center'}
 print(zemljevid.delezZ)
 ```
+
+***
+
+# Povzetek
+
+Med izdelavo projekta sem prišla do ugotovitve, da je kljub trudu v današnjih časih, da bi bili moški in ženske enakopravni, še vedno velika razlika med zaposlitvijo moških in žensk. Moški še vedno lažje najdejo zaposlitev, tudi v bolj razvitih državah. Prav tako lahko iz grafov razberemo, da so velike razlike med manj razvitimi in razvitimi državami, recimo balkanske države imajo zaposlijo veliko manjše število študentov,ki so nemalo nazaj zaključili študij. Glede na trende zadnje par let lahko sklepam, da se bo zaposljivost v naslednjih letih povečevala.
 
 ***
