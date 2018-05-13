@@ -21,7 +21,7 @@ source("lib/libraries.r", encoding = "UTF-8")
 
 # Izbira teme
 
-Odločila sem se, da analiziram zaposlovanje študentov po končanem študiju. Za to temo sem se odločila, ker me zanima, kako težko oziroma lahko je najti zaposlitev in kako na to vplivajo različni dejavniki, kot je spol in pa investiranje posamezne evropske države v terciarno izobraževanje. Zdi se mi, da bo analiza pokazala, da prej zaposlijo moške kot ženske, ter da investiranje države pripomore k lažji zaposlitvi. Starost ljudi sem omejila na 20-34 let.
+Odločila sem se, da analiziram zaposlovanje študentov po končanem študiju. Za to temo sem se odločila, ker me zanima, kako težko oziroma lahko je najti zaposlitev, in kako na to vplivajo različni dejavniki, kot je spol in pa investiranje posamezne evropske države v terciarno izobraževanje. Zdi se mi, da bo analiza pokazala, da prej zaposlijo moške kot ženske, ter da investiranje države pripomore k lažji zaposlitvi. Starost ljudi sem omejila na 20-34 let.
 
 ***
 <center>
@@ -80,13 +80,13 @@ kable(head(trajanje.slo), align="ccccc")
 ```{r vizualizacija, echo=FALSE, message=FALSE, warning=FALSE}
 source("vizualizacija/vizualizacija.r", encoding = "UTF-8")
 ```
-Prvi črtni graf prikazuje delež BDP, ki ga država investira iz javnega sektorja v visokošolstvo. Zaradi preobsežnosti podatkov (veliko držav), ki bi bili nepregledni na grafu, sem se odločila, da narišem le podatke o 9 državah, nekatere bolj uspešne in nekatere manj uspešne. Med njimi je tudi Slovenija.Ta graf sem vključila, da je bolj razvidno, katere države bolj vlagajo v visokošolstvo, med njimi pa je očitno Švedska tista, ki investira največ. Po tem bi lahko sklepali, da bo imela kar visok delež zaposlenih po koncu študija, to pa bomo videli v naslednjih grafih.
+Prvi črtni graf prikazuje delež BDP, ki ga država investira iz javnega sektorja v visokošolstvo. Zaradi preobsežnosti podatkov (veliko držav), ki bi bili nepregledni na grafu, sem se odločila, da narišem le podatke o 9 državah, nekatere bolj uspešne in nekatere manj uspešne. Med njimi je tudi Slovenija. Ta graf sem vključila, da je bolj razvidno, katere države bolj vlagajo v visokošolstvo, med njimi pa je očitno Švedska tista, ki investira največ. Po tem bi lahko sklepali, da bo imela kar visok delež zaposlenih po koncu študija, to pa bomo videli v naslednjih grafih.
 
 ```{r graf1, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 print(graf1)
 ```
 
-Drugi graf, ki je sestavljen iz dveh črtnih grafov prikazuje odstotek študentov, ki se zaposli kmalu po končanem študiju. Dva grafa sem združila zato, da se lažje primerja razliko med zaposlitvijo žensk in zaposlitvijo moških. Podatki so omejeni na izbranih 9 držav. Kot sem pričakovala, je iz grafa očitno, da so deleži zaposlenih moških višji kot pri ženskah.Največja izjema pa se mi zdi Hrvaška leta 2013, kjer so procenti v prid ženskam. Najslabšo zaposljivost ima definitivno Grčija, predvidevam da zaradi krize, ki jih je prizadela, najslabše je bilo leta 2013.Vidi se, da največ ljudi lažje dobi delo v Nemčiji.
+Drugi graf, ki je sestavljen iz dveh črtnih grafov prikazuje odstotek študentov, ki se zaposli kmalu po končanem študiju. Dva grafa sem združila zato, da se lažje primerja razliko med zaposlitvijo žensk in zaposlitvijo moških. Podatki so omejeni na izbranih 9 držav. Kot sem pričakovala, je iz grafa očitno, da so deleži zaposlenih moških višji kot pri ženskah. Največja izjema pa se mi zdi Hrvaška leta 2013, kjer so procenti v prid ženskam. Najslabšo zaposljivost ima definitivno Grčija, predvidevam da zaradi krize, ki jih je prizadela, najslabše je bilo leta 2013.Vidi se, da največ ljudi lažje dobi delo v Nemčiji.
 
 ```{r graf2, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 print(graf2)
@@ -98,13 +98,13 @@ print(graf3)
 ``` 
 
 
-Odločila sem se, da v 1. zemljevidu pokažem delež zaposlenih moških po končanem študiju, ki so potrebovali 5 let ali manj, da so se zaposlili.Tu sem se osredotočila na leto 2016, torej le zadnje trende, iz katerih si lažje predstavljamo trende v prihodnosti.Najsvetleje obarvane države imajo najvišji delež, to pa so države bolj na severu Evrope. Te veljajo za bolj razvite, kar pa se seveda pozna tudi pri zaposljivosti. Države na Balkanu imajo malo slabše razmere, čeprav pa nimam podatkov za vse države, lahko sklepam, da so tudi tam deleži podobni. Najslabša med njimi je Črna Gora.
+Odločila sem se, da v 1. zemljevidu pokažem delež zaposlenih moških po končanem študiju, ki so potrebovali 5 let ali manj, da so se zaposlili. Tu sem se osredotočila na leto 2016, torej le zadnje trende, iz katerih si lažje predstavljamo trende v prihodnosti. Najsvetleje obarvane države imajo najvišji delež, to pa so države bolj na severu Evrope. Te veljajo za bolj razvite, kar pa se seveda pozna tudi pri zaposljivosti. Države na Balkanu imajo malo slabše razmere, čeprav pa nimam podatkov za vse države, lahko sklepam, da so tudi tam deleži podobni. Najslabša med njimi je Črna Gora.
 
 ```{r zemljevid.delezM, echo=FALSE, fig.align='center'}
 print(zemljevid.delezM)
 ```
 
-2. zemljevid je podoben, le da so namesto podatkov o moških, podatki o ženskah.Če primerjamo zemljevida, vidimo, da je med moškimi in ženskami velika razlika, kar sem ugotovila že v grafu, vendar je v zemljevidu bolj opazno. Precej razlike je v Grčiji in Turčiji, pa tudi na Finskem.
+2. zemljevid je podoben, le da so namesto podatkov o moških, podatki o ženskah. Če primerjamo zemljevida, vidimo, da je med moškimi in ženskami velika razlika, kar sem ugotovila že v grafu, vendar je v zemljevidu bolj opazno. Precej razlike je v Grčiji in Turčiji, pa tudi na Finskem.
 
 ```{r zemljevid.delezZ, echo=FALSE, warning=FALSE, fig.align='center'}
 print(zemljevid.delezZ)
@@ -114,6 +114,6 @@ print(zemljevid.delezZ)
 
 # Povzetek
 
-Med izdelavo projekta sem prišla do ugotovitve, da je kljub trudu v današnjih časih, da bi bili moški in ženske enakopravni, še vedno velika razlika med zaposlitvijo moških in žensk. Moški še vedno lažje najdejo zaposlitev, tudi v bolj razvitih državah. Prav tako lahko iz grafov razberemo, da so velike razlike med manj razvitimi in razvitimi državami, recimo balkanske države imajo zaposlijo veliko manjše število študentov,ki so nemalo nazaj zaključili študij. Glede na trende zadnje par let lahko sklepam, da se bo zaposljivost v naslednjih letih povečevala.
+Med izdelavo projekta sem prišla do ugotovitve, da je kljub trudu v današnjih časih, da bi bili moški in ženske enakopravni, še vedno velika razlika med zaposlitvijo moških in žensk. Moški še vedno lažje najdejo zaposlitev, tudi v bolj razvitih državah. Prav tako lahko iz grafov razberemo, da so velike razlike med manj razvitimi in razvitimi državami, recimo balkanske države imajo zaposlijo veliko manjše število študentov, ki so nemalo nazaj zaključili študij. Glede na trende zadnje par let lahko sklepam, da se bo zaposljivost v naslednjih letih povečevala.
 
 ***
