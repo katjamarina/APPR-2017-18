@@ -59,7 +59,6 @@ bdp <- bdp[ , -c(3:6)]
 colnames(bdp) <- c("leto", "drzava", "delez")
 bdp.slo <- bdp %>% mutate(drzava = drzave.slo[drzava])
 
-
 #uvozimo tabelo s procenti moskih, ki so nasli zaposlitev
 uvozi.procenti_moskih <- function() {
   data <- read_csv("podatki/procenti_moski.csv", na = ":",
@@ -94,7 +93,7 @@ colnames(procenti_zensk) <- c("leto", "drzava", "starost", "spol", "delez")
 
 #zberemo podatke M/Z v eno tabelo
 procenti <- rbind(procenti_moskih, procenti_zensk) %>% na.omit(procenti)
-procenti <- procenti %>% mutate(leto) %>% arrange(leto, drzava)
+procenti <- procenti %>% mutate(leto = parse_number(leto)) %>% arrange(leto, drzava)
 procenti.slo <- procenti %>% mutate(drzava = drzave.slo[drzava])
 
 uvozi.trajanje1 <- function() {
@@ -129,7 +128,7 @@ vec3 <- uvozi.trajanje2()
 trajanje <- rbind(manj3, vec3)
 trajanje <- trajanje[, -c(4, 6, 7)]
 colnames(trajanje) <- c("leto", "drzava", "trajanje", "starost", "delez")
-trajanje <- trajanje %>% mutate(leto) %>% arrange(leto, drzava)
+trajanje <- trajanje %>% mutate(leto = parse_number(leto)) %>% arrange(leto, drzava)
 #spremenimo v slo drzave
 trajanje.slo <- trajanje %>% mutate(drzava = drzave.slo[drzava])
 

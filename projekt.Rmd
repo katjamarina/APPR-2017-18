@@ -54,7 +54,7 @@ kable(head(bdp.slo), align="ccc")
   `procenti.slo` - podatki o deležu zaposlenih po končanem šolanju, ki so se zaposlili po manj kot petih letih
   - `leto` - spremenljivka: leto (integer: 2000-2016),
   - `drzava` - spremenljivka: evropska država (character: države v Evropi),
-  - `starost` - spremenljivka: starost 20-34 (integer),
+  - `starost` - spremenljivka: starost 20-34 (character),
   - `spol` - spremenljivka: moški(M) ali ženski(Z) (character),
   - `delez` - meritev: delež zaposlenih po končanem študiju (numeric).
 
@@ -67,7 +67,7 @@ kable(head(procenti.slo), align="ccccc")
   - `leto` - spremenljivka: leto (integer: 2000-2016),
   - `drzava` - spremenljivka: evropska država (character: države v Evropi),
   - `trajanje` - spremenljivka: manj kot 3 leta ali manj kot tri leta (character)
-  - `starost` - spremenljivka: starost 20-34 (integer),
+  - `starost` - spremenljivka: starost 20-34 (character),
   - `delez` - meritev: delež zaposlenih glede na trajanje iskanja zaposlitve(numeric)
 
 ```{r trajanje.slo, echo=FALSE, message=FALSE, warning=FALSE}
@@ -114,6 +114,6 @@ print(zemljevid.delezZ)
 
 # Povzetek
 
-Med izdelavo projekta sem prišla do ugotovitve, da je kljub trudu v današnjih časih, da bi bili moški in ženske enakopravni, še vedno velika razlika med zaposlitvijo moških in žensk. Moški še vedno lažje najdejo zaposlitev, tudi v bolj razvitih državah. Prav tako lahko iz grafov razberemo, da so velike razlike med manj razvitimi in razvitimi državami, recimo balkanske države imajo zaposlijo veliko manjše število študentov, ki so nemalo nazaj zaključili študij. Glede na trende zadnje par let lahko sklepam, da se bo zaposljivost v naslednjih letih povečevala.
+Med izdelavo projekta sem prišla do ugotovitve, da je kljub trudu v današnjih časih, da bi bili moški in ženske enakopravni, še vedno velika razlika med zaposlitvijo moških in žensk. Moški še vedno lažje najdejo zaposlitev, tudi v bolj razvitih državah. Prav tako lahko iz grafov razberemo, da so velike razlike med manj razvitimi in razvitimi državami, recimo balkanske države zaposlijo veliko manjše število študentov, ki so nemalo nazaj zaključili študij. Glede na trende zadnje par let lahko sklepam, da se bo zaposljivost v naslednjih letih povečevala.
 
 ***
