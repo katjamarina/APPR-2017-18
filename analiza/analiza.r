@@ -21,9 +21,12 @@ rownames(grupe2) <- grupe$drzava
 k <- kmeans(grupe2, 4, nstart = 1000)
 
 skupine1 <- data.frame(drzava = grupe$drzava, skupina = factor(k$cluster))
-grupe_zemljevid <- ggplot() + geom_polygon(data = skupine1 %>% left_join(zemljevid,
-                                         by = c("drzava" = "NAME_LONG")),
-                        aes(x = long, y = lat, group = group, 
-                            fill = skupina)) +
+
+#ggplot(inner_join(skupine1, grupe), aes(x = delez.x, y = delez.y, color = skupina)) + geom_point()
+
+grupe_zemljevid <- ggplot() + geom_polygon(data = zemljevid %>% filter(long > -30) %>%
+                                             left_join(skupine1, by = c("NAME_LONG" = "drzava")),
+                                           aes(x = long, y = lat, group = group, 
+                                               fill = skupina)) +
   coord_map(xlim = c(-25, 40), ylim = c(32, 72))
 

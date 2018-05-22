@@ -2,7 +2,7 @@
 
 #Uvozimo grafe
 
-graf1 <- ggplot(bdp.slo %>% filter(drzava %in% c("Nemčija", "Slovenija", "Švedska", "Italija", "Francija", "Združeno kraljestvo", "Češka", "Grčija", "Hrvaška")), 
+graf1 <- ggplot(uvozi_bdp.slo %>% filter(drzava %in% c("Nemčija", "Slovenija", "Švedska", "Italija", "Francija", "Združeno kraljestvo", "Češka", "Grčija", "Hrvaška")), 
                 aes(x = leto, y = delez, color = drzava)) +
   geom_line(size = 1) +
   geom_point(size = 1.5) +

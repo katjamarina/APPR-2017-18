@@ -46,7 +46,7 @@ Podatke o zaposlitvi sem uvozila v obliki CSV iz Eurostata, ki jih imam v treh r
   - `drzava` - spremenljivka: evropska država (character: države v Evropi),
   - `delez` - meritev: delež BDP-ja, porabljen za visokošolstvo (numeric).
   
-```{r bdp.slo, echo=FALSE, message=FALSE, warning=FALSE}
+```{r uvozi_bdp.slo, echo=FALSE, message=FALSE, warning=FALSE}
 kable(head(bdp.slo), align="ccc")
 ```
 
