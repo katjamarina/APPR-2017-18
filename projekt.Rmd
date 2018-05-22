@@ -59,19 +59,18 @@ kable(head(bdp.slo), align="ccc")
   - `delez` - meritev: delež zaposlenih po končanem študiju (numeric).
 
 ```{r procenti.slo, echo=FALSE, message=FALSE, warning=FALSE}
-kable(head(procenti.slo), align="ccccc")
+kable(head(procenti.slo), align="cccc")
 ```
 
 3. [tabela](http://ec.europa.eu/eurostat/tgm/table.do?tab=table&init=1&language=en&pcode=tps00053&plugin=1)
   `trajanje.slo` - podatki o deležu zaposlenih glede na trajanje iskanja zaposlitve (manj kot tri leta ali več kot tri leta)
   - `leto` - spremenljivka: leto (integer: 2000-2016),
   - `drzava` - spremenljivka: evropska država (character: države v Evropi),
-  - `trajanje` - spremenljivka: manj kot 3 leta ali manj kot tri leta (character)
-  - `starost` - spremenljivka: starost 20-34 (character),
+  - `trajanje` - spremenljivka: manj kot 3 leta ali manj kot tri leta (character),
   - `delez` - meritev: delež zaposlenih glede na trajanje iskanja zaposlitve(numeric)
 
 ```{r trajanje.slo, echo=FALSE, message=FALSE, warning=FALSE}
-kable(head(trajanje.slo), align="ccccc")
+kable(head(trajanje.slo), align="cccc")
 ```
 
 

@@ -10,6 +10,8 @@ library(httr)
 library(tidyr)
 library(sp)
 library(maptools)
+library(XML)
+library(mapproj)
 
 # Uvozimo funkcije za pobiranje in uvoz zemljevida.
 source("lib/uvozi.zemljevid.r", encoding = "UTF-8")

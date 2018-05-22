@@ -1,5 +1,5 @@
 # 2. faza: Uvoz podatkov
-
+library(XML)
 sl <- locale("sl", decimal_mark = ",", grouping_mark = ".")
 
 #vektor, ki spremeni imena držav v slo
@@ -45,19 +45,22 @@ drzave.slo <- c(
 )
 
 # Funkcija, ki uvozi podatke iz datoteke uvozi.gdp
-uvozi.bdp <- function() {
-  data <- read_csv("podatki/gdp.csv", na = ":",
-                    locale = locale(encoding = "UTF-8"))
-  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
-  data$UNIT <- gsub("Percentage.*", "Bruto domači proizvod (BDP)", data$UNIT)
-  return(data)
-}
+#uvozi.bdp <- function() {
+#  data <- readHTMLTable("podatki/gdphtml.html", na = ":",
+#                        locale = locale(encoding = "UTF-8"))
+#  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
+#  data$UNIT <- gsub("Percentage.*", "Bruto domači proizvod (BDP)", data$UNIT)
+#  return(data)
+#}
 
-#zapisimo podatke v razpredelnico gdp
-bdp <- uvozi.bdp()
-bdp <- bdp[ , -c(3:6)]
-colnames(bdp) <- c("leto", "drzava", "delez")
-bdp.slo <- bdp %>% mutate(drzava = drzave.slo[drzava])
+uvozi_bdp <- readHTMLTable("podatki/gdphtml.html", which = 1)
+uvozi_bdp <- uvozi_bdp %>% melt(id.vars = "TIMEGEO", variable.name = "leto",
+                                                     value.name = "delez") %>%
+  mutate(delez = parse_number(delez, na = ":")) %>% drop_na(delez) 
+colnames(uvozi_bdp)[1] <- "drzava"
+uvozi_bdp$drzava <- gsub("Germany.*", "Germany", uvozi_bdp$drzava)
+uvozi_bdp$drzava <- gsub("Former.*", "Macedonia", uvozi_bdp$drzava)
+uvozi_bdp.slo <- uvozi_bdp %>% mutate(drzava = drzave.slo[drzava])
 
 #uvozimo tabelo s procenti moskih, ki so nasli zaposlitev
 uvozi.procenti_moskih <- function() {
@@ -72,8 +75,8 @@ uvozi.procenti_moskih <- function() {
 
 #zapisimo podatke v tabelo procenti_moskih
 procenti_moskih <- uvozi.procenti_moskih()
-procenti_moskih <- procenti_moskih[ , -c(3, 4, 7)]
-colnames(procenti_moskih) <- c("leto", "drzava", "starost", "spol", "delez")
+procenti_moskih <- procenti_moskih[ , -c(3, 4, 5, 7)]
+colnames(procenti_moskih) <- c("leto", "drzava", "spol", "delez")
 
 #uvozimo tabelo s procenti zensk, ki so nasle zaposlitev
 uvozi.procenti_zensk <- function() {
@@ -88,8 +91,8 @@ uvozi.procenti_zensk <- function() {
 
 #zapisimo podatke v tabelo procenti_zensk
 procenti_zensk <- uvozi.procenti_zensk()
-procenti_zensk <- procenti_zensk[ , -c(3, 4, 7)]
-colnames(procenti_zensk) <- c("leto", "drzava", "starost", "spol", "delez")
+procenti_zensk <- procenti_zensk[ , -c(3, 4, 5, 7)]
+colnames(procenti_zensk) <- c("leto", "drzava", "spol", "delez")
 
 #zberemo podatke M/Z v eno tabelo
 procenti <- rbind(procenti_moskih, procenti_zensk) %>% na.omit(procenti)
@@ -126,11 +129,21 @@ vec3 <- uvozi.trajanje2()
 
 #zdruzimo podatke o trajanju iskanja zaposlitve v eno tabelo
 trajanje <- rbind(manj3, vec3)
-trajanje <- trajanje[, -c(4, 6, 7)]
-colnames(trajanje) <- c("leto", "drzava", "trajanje", "starost", "delez")
+trajanje <- trajanje[, -c(4, 5, 6, 7)]
+colnames(trajanje) <- c("leto", "drzava", "trajanje", "delez")
 trajanje <- trajanje %>% mutate(leto = parse_number(leto)) %>% arrange(leto, drzava)
 #spremenimo v slo drzave
 trajanje.slo <- trajanje %>% mutate(drzava = drzave.slo[drzava])
+
+#uvozimo skupne procente
+skupni_procenti <- readHTMLTable("podatki/delezvseh.html", which = 1)
+skupni_procenti <- skupni_procenti %>% melt(id.vars = "TIMEGEO", variable.name = "leto",
+                                value.name = "delez") %>%
+  mutate(delez = parse_number(delez, na = ":")) %>% drop_na(delez) 
+colnames(skupni_procenti)[1] <- "drzava"
+skupni_procenti$drzava <- gsub("Germany.*", "Germany", skupni_procenti$drzava)
+skupni_procenti$drzava <- gsub("Former.*", "Macedonia", skupni_procenti$drzava)
+skupni_procenti.slo <- skupni_procenti %>% mutate(drzava = drzave.slo[drzava])
 
 
 # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
