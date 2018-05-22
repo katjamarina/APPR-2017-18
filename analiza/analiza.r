@@ -22,7 +22,8 @@ k <- kmeans(grupe2, 4, nstart = 1000)
 
 skupine1 <- data.frame(drzava = grupe$drzava, skupina = factor(k$cluster))
 
-#ggplot(inner_join(skupine1, grupe), aes(x = delez.x, y = delez.y, color = skupina)) + geom_point()
+#kako sem izbrala skupine
+ggplot(inner_join(skupine1, grupe), aes(x = delez.x, y = delez.y, color = skupina)) + geom_point()
 
 grupe_zemljevid <- ggplot() + geom_polygon(data = zemljevid %>% filter(long > -30) %>%
                                              left_join(skupine1, by = c("NAME_LONG" = "drzava")),
