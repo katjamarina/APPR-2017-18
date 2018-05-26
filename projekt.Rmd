@@ -38,23 +38,22 @@ Odločila sem se, da analiziram zaposlovanje študentov po končanem študiju. Z
 source("uvoz/uvoz.r", encoding = "UTF-8")
 ```
 
-Podatke o zaposlitvi sem uvozila v obliki CSV iz Eurostata, ki jih imam v treh razpredelnicah v obliki *tidy data*. 
+Podatke o zaposlitvi sem uvozila v obliki CSV in HTML iz Eurostata, ki jih imam v treh razpredelnicah v obliki *tidy data*. 
 
 1. [tabela](http://appsso.eurostat.ec.europa.eu/nui/show.do?query=BOOKMARK_DS-471197_QID_5A0B07B7_UID_-3F171EB0&layout=TIME,C,X,0;GEO,L,Y,0;UNIT,L,Z,0;SECTOR,L,Z,1;COFOG99,L,Z,2;NA_ITEM,L,Z,3;INDICATORS,C,Z,4;&zSelection=DS-471197UNIT,MIO_EUR;DS-471197COFOG99,TOTAL;DS-471197SECTOR,S13;DS-471197INDICATORS,OBS_FLAG;DS-471197NA_ITEM,TE;&rankName1=UNIT_1_2_-1_2&rankName2=SECTOR_1_2_-1_2&rankName3=INDICATORS_1_2_-1_2&rankName4=NA-ITEM_1_2_-1_2&rankName5=COFOG99_1_2_-1_2&rankName6=TIME_1_0_0_0&rankName7=GEO_1_2_0_1&sortC=ASC_-1_FIRST&rStp=&cStp=&rDCh=&cDCh=&rDM=true&cDM=true&footnes=false&empty=false&wai=false&time_mode=FIXED&time_most_recent=false&lang=EN&cfo=%23%23%23%2C%23%23%23.%23%23%23&lang=en): 
-  `bdp.slo` - podatki o BDP-ju za vsako državo po letih 2000-2016
+  `uvozi_bdp.slo` - podatki o BDP-ju za vsako državo po letih 2000-2016
   - `leto` - spremenljivka: leto (integer: 2000-2016),
   - `drzava` - spremenljivka: evropska država (character: države v Evropi),
   - `delez` - meritev: delež BDP-ja, porabljen za visokošolstvo (numeric).
   
 ```{r uvozi_bdp.slo, echo=FALSE, message=FALSE, warning=FALSE}
-kable(head(bdp.slo), align="ccc")
+kable(head(uvozi_bdp.slo), align="ccc")
 ```
 
 2. [tabela](http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=edat_lfse_24&lang=en)
   `procenti.slo` - podatki o deležu zaposlenih po končanem šolanju, ki so se zaposlili po manj kot petih letih
   - `leto` - spremenljivka: leto (integer: 2000-2016),
   - `drzava` - spremenljivka: evropska država (character: države v Evropi),
-  - `starost` - spremenljivka: starost 20-34 (character),
   - `spol` - spremenljivka: moški(M) ali ženski(Z) (character),
   - `delez` - meritev: delež zaposlenih po končanem študiju (numeric).
 
@@ -79,7 +78,7 @@ kable(head(trajanje.slo), align="cccc")
 ```{r vizualizacija, echo=FALSE, message=FALSE, warning=FALSE}
 source("vizualizacija/vizualizacija.r", encoding = "UTF-8")
 ```
-Prvi črtni graf prikazuje delež BDP, ki ga država investira iz javnega sektorja v visokošolstvo. Zaradi preobsežnosti podatkov (veliko držav), ki bi bili nepregledni na grafu, sem se odločila, da narišem le podatke o 9 državah, nekatere bolj uspešne in nekatere manj uspešne. Med njimi je tudi Slovenija. Ta graf sem vključila, da je bolj razvidno, katere države bolj vlagajo v visokošolstvo, med njimi pa je očitno Švedska tista, ki investira največ. Po tem bi lahko sklepali, da bo imela kar visok delež zaposlenih po koncu študija, to pa bomo videli v naslednjih grafih.
+Prvi črtni graf prikazuje delež BDP, ki ga država investira iz javnega sektorja v visokošolstvo. Zaradi preobsežnosti podatkov (veliko držav), ki bi bili nepregledni na grafu, sem se odločila, da narišem le podatke o 9 državah, nekatere bolj uspešne in nekatere manj uspešne. Med njimi je tudi Slovenija. Ta graf sem vključila, da je bolj razvidno, katere države bolj vlagajo v visokošolstvo, med njimi pa je očitno Švedska tista, ki investira največ, vsaj v prejšnjih letih. Po tem bi lahko sklepali, da bo imela kar visok delež zaposlenih po koncu študija, to pa bomo videli v naslednjih grafih.
 
 ```{r graf1, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 print(graf1)
@@ -97,22 +96,33 @@ print(graf3)
 ``` 
 
 
-Odločila sem se, da v 1. zemljevidu pokažem delež zaposlenih moških po končanem študiju, ki so potrebovali 5 let ali manj, da so se zaposlili. Tu sem se osredotočila na leto 2016, torej le zadnje trende, iz katerih si lažje predstavljamo trende v prihodnosti. Najsvetleje obarvane države imajo najvišji delež, to pa so države bolj na severu Evrope. Te veljajo za bolj razvite, kar pa se seveda pozna tudi pri zaposljivosti. Države na Balkanu imajo malo slabše razmere, čeprav pa nimam podatkov za vse države, lahko sklepam, da so tudi tam deleži podobni. Najslabša med njimi je Črna Gora.
+Odločila sem se, da v zemljevidih pokažem razliko med deležom zaposlenih moških in žensk po končanem študiju, ki so potrebovali 5 let ali manj, da so se zaposlili. Tu sem se osredotočila na leto 2016, torej le zadnje trende, iz katerih si lažje predstavljamo trende v prihodnosti. Najsvetleje obarvane države imajo najvišji delež, to pa so države bolj na severu Evrope. Te veljajo za bolj razvite, kar pa se seveda pozna tudi pri zaposljivosti. Države na Balkanu imajo malo slabše razmere, čeprav pa nimam podatkov za vse države, lahko sklepam, da so tudi tam deleži podobni. Najslabša med njimi je Črna Gora. Če primerjamo zemljevida, vidimo, da je med moškimi in ženskami velika razlika, kar sem ugotovila že v grafu, vendar je v zemljevidu bolj opazno. Precej razlike je v Grčiji in Turčiji, pa tudi na Finskem.
 
-```{r zemljevid.delezM, echo=FALSE, fig.align='center'}
-print(zemljevid.delezM)
-```
-
-2. zemljevid je podoben, le da so namesto podatkov o moških, podatki o ženskah. Če primerjamo zemljevida, vidimo, da je med moškimi in ženskami velika razlika, kar sem ugotovila že v grafu, vendar je v zemljevidu bolj opazno. Precej razlike je v Grčiji in Turčiji, pa tudi na Finskem.
-
-```{r zemljevid.delezZ, echo=FALSE, warning=FALSE, fig.align='center'}
-print(zemljevid.delezZ)
+```{r zemljevid.skupaj, echo=FALSE, warning=FALSE, fig.align='center'}
+print(zemljevid.skupaj)
 ```
 
 ***
 
+#Napredna analiza
+```{r analiza, echo=FALSE, message=FALSE, warning=FALSE}
+source("analiza/analiza.r", encoding = "UTF-8")
+```
+
+Ker me je zanimala povezava med odstotkom BDP-ja posamezne države, vloženim v visokošolstvo, in deležem zaposlovanja, sem ta dva podatka za leto 2015 združila v tabelo in z metodo clusteringa države razdelila v štiri skupine, in iz tega poskušala razbrati, kako sta ti dve spremenljivki povezani. Prvi graf spodaj prikazuje, kako je clustering države razdelil po skupinah.
+
+```{r razdelitev, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+print(razdelitev)
+``` 
+
+Iz grafa sem razbrala, da so npr. Švica, Nizozemska in Finska v isti skupini, te pa imajo delež zaposlitve okoli 80 odstotkov ali več, in v visokošolstvo vlagajo nad 1% BDP-ja (kot tudi druge države v tej skupini). Naslednja skupina so večinoma prav tako države z relativno visoko zaposlitvijo, čeprav v visokošolstvo vlagajo manj kot prve, to so npr. Švedska, Nemčija in Združeno kraljestvo. Francija, Hrvaška in Slovenija, ki so v isti skupini, imajo vložek BDP-ja v terciarno izobraževanje podoben kot prejšnja skupina, razlika pa je manjši delež zaposlitve (nekaj nad 70%). V zadnji skupini sta le Italija in Grčija, zadnja pa najmanj vlaga v visokošolstvo. Možna posledica tega je morda to, da je imela leta 2015 odstotek študentov, ki so se zaposlili v 5 letih ali manj, le 52,8%. Za lažjo predstavo sem skupine držav še narisala na zemljevid.
+
+```{r grupe.zemljevid, echo=FALSE, warning=FALSE, fig.align='center'}
+print(grupe.zemljevid)
+```
+
 # Povzetek
 
-Med izdelavo projekta sem prišla do ugotovitve, da je kljub trudu v današnjih časih, da bi bili moški in ženske enakopravni, še vedno velika razlika med zaposlitvijo moških in žensk. Moški še vedno lažje najdejo zaposlitev, tudi v bolj razvitih državah. Prav tako lahko iz grafov razberemo, da so velike razlike med manj razvitimi in razvitimi državami, recimo balkanske države zaposlijo veliko manjše število študentov, ki so nemalo nazaj zaključili študij. Glede na trende zadnje par let lahko sklepam, da se bo zaposljivost v naslednjih letih povečevala.
+Med izdelavo projekta sem prišla do ugotovitve, da je kljub trudu v današnjih časih, da bi bili moški in ženske enakopravni, še vedno velika razlika med zaposlitvijo moških in žensk. Moški še vedno lažje najdejo zaposlitev, tudi v bolj razvitih državah. Prav tako lahko iz grafov razberemo, da so velike razlike med manj razvitimi in razvitimi državami, recimo balkanske države zaposlijo veliko manjše število študentov, ki so nemalo nazaj zaključili študij.Iz primerjave pri napredni analizi lahko sklepam, da vlaganje države v visokošolstvo malo pripomore k deležu zaposlitve po študiju, ni pa to tako zelo ključno, saj na to seveda vpliva še veliko drugih faktorjev, ki pa jih v svojem projektu nisem vključila. Glede na trende zadnje par let lahko sklepam, da se bo zaposljivost v naslednjih letih povečevala.
 
 ***

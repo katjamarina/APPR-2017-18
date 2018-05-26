@@ -44,15 +44,7 @@ drzave.slo <- c(
   "Former Yugoslav Republic of Macedonia" = "Makedonija"
 )
 
-# Funkcija, ki uvozi podatke iz datoteke uvozi.gdp
-#uvozi.bdp <- function() {
-#  data <- readHTMLTable("podatki/gdphtml.html", na = ":",
-#                        locale = locale(encoding = "UTF-8"))
-#  data$GEO <- gsub("Germany.*", "Germany", data$GEO)
-#  data$UNIT <- gsub("Percentage.*", "Bruto domači proizvod (BDP)", data$UNIT)
-#  return(data)
-#}
-
+#uvozimo tabelo z deležom BDP
 uvozi_bdp <- readHTMLTable("podatki/gdphtml.html", which = 1)
 uvozi_bdp <- uvozi_bdp %>% melt(id.vars = "TIMEGEO", variable.name = "leto",
                                                      value.name = "delez") %>%
@@ -95,7 +87,7 @@ procenti_zensk <- procenti_zensk[ , -c(3, 4, 5, 7)]
 colnames(procenti_zensk) <- c("leto", "drzava", "spol", "delez")
 
 #zberemo podatke M/Z v eno tabelo
-procenti <- rbind(procenti_moskih, procenti_zensk) %>% na.omit(procenti)
+procenti <- rbind(procenti_moskih , procenti_zensk) %>% na.omit(procenti)
 procenti <- procenti %>% mutate(leto = parse_number(leto)) %>% arrange(leto, drzava)
 procenti.slo <- procenti %>% mutate(drzava = drzave.slo[drzava])
 

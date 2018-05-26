@@ -3,7 +3,7 @@
 #Uvozimo grafe
 
 graf1 <- ggplot(uvozi_bdp.slo %>% filter(drzava %in% c("Nemčija", "Slovenija", "Švedska", "Italija", "Francija", "Združeno kraljestvo", "Češka", "Grčija", "Hrvaška")), 
-                aes(x = leto, y = delez, color = drzava)) +
+                aes(x = leto, y = delez, color = drzava, group = drzava)) +
   geom_line(size = 1) +
   geom_point(size = 1.5) +
   xlab("Leto") + ylab("Delež BDP") +
@@ -29,17 +29,8 @@ zemljevid <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturale
 
 procenti$drzava <- parse_factor(procenti$drzava, levels(zemljevid$NAME_LONG))
 
-zemljevid.delezM <- ggplot() +
-  geom_polygon(data = procenti %>% filter(spol == "M", leto == 2016) %>%
-                 right_join(zemljevid, by = c("drzava" = "NAME_LONG")),
-               aes(x = long, y = lat, group = group, fill = delez)) +
-  coord_cartesian(xlim = c(-22, 40), ylim = c(30, 70)) +
-  ggtitle("Zemljevid deleža zaposlenih moških po končanem študiju leta 2016")
-
-zemljevid.delezZ <- ggplot() +
-  geom_polygon(data = procenti %>% filter(spol == "Z", leto == 2016) %>%
-                 right_join(zemljevid, by = c("drzava" = "NAME_LONG")),
-               aes(x = long, y = lat, group = group, fill = delez)) +
-  coord_cartesian(xlim = c(-22, 40), ylim = c(30, 70)) +
-  ggtitle("Zemljevid deleža zaposlenih žensk po končanem študiju leta 2016")
+zemljevid.skupaj <- ggplot() + geom_polygon(data = zemljevid %>% inner_join(data.frame(LEVEL = 2, spol = c("M", "Z"))) %>%
+                                              left_join(procenti %>% filter(leto == 2016), by = c("NAME_LONG" = "drzava", "spol" = "spol")),
+                                            aes(x = long, y = lat, group = group, fill = delez)) + facet_grid(~ spol) +
+  coord_cartesian(xlim = c(-22, 40), ylim = c(30, 70)) + ggtitle("Delež zaposlenih po spolu")
 

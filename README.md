@@ -4,7 +4,7 @@ Repozitorij z gradivi pri predmetu APPR v študijskem letu 2017/18
 
 ## Zaposljivost po končanem študiju v Evropi
 
-V svojem projektu bom analizirala, kolikšen delež študentov se je po končanem študiju zaposlil ter kako hitro so našli zaposlitev. To bom primerjala skozi leta 2000-2016. Podatke bom primerjala tudi po spolu in po tem, koliko BDP-ja država nameni financiranju fakultet, ter kako se stanje razlikuje v državah po Evropi. Tabele sem pridobila iz Eurostata v obliki CSV.
+V svojem projektu bom analizirala, kolikšen delež študentov se je po končanem študiju zaposlil ter kako hitro so našli zaposlitev. To bom primerjala skozi leta 2000-2016. Podatke bom primerjala tudi po spolu in po tem, koliko BDP-ja država nameni financiranju fakultet, ter kako se stanje razlikuje v državah po Evropi. Tabele sem pridobila iz Eurostata v obliki CSV in HTML.
 
 Podatke sem dobila na:
 * http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=edat_lfse_24&lang=en
@@ -21,7 +21,6 @@ Naredila bom tri tabele:
 2. tabela (po stolpcih) - delež po študiju kmalu zaposlenih študentov(5 let ali manj): 
   * Leto
   * Država
-  * Starost
   * Spol
   * Delež
   
@@ -29,7 +28,6 @@ Naredila bom tri tabele:
   * Leto
   * Država
   * Trajanje
-  * Starost
   * Delež
   
 V projektu bom narisala tudi 3 grafe in 2 zemljevida:
