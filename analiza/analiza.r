@@ -15,8 +15,8 @@ skupine1 <- data.frame(drzava = grupe$drzava, skupina = factor(k$cluster))
 
 #kako sem izbrala skupine
 razdelitev <- ggplot(inner_join(skupine1, grupe), aes(x = delez.x, y = delez.y, color = skupina)) + geom_point() +
-  ggtitle("Skupine po delezu zaposlitve in delezu BDP-ja vlozenega v visokosolstvo (leto 2015)") +
-  xlab("Delez BDP") + ylab("Delez zaposlitve")
+  ggtitle("Skupine po deležu zaposlitve in deležu BDP-ja vloženega v visokošolstvo (leto 2015)") +
+  xlab("Delež BDP") + ylab("Delež zaposlitve")
 
 #narišemo v zemljevid
 grupe.zemljevid <- ggplot() + geom_polygon(data = zemljevid %>% filter(long > -30) %>%
