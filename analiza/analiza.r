@@ -22,6 +22,6 @@ razdelitev <- ggplot(inner_join(skupine1, grupe), aes(x = delez.x, y = delez.y, 
 grupe.zemljevid <- ggplot() + geom_polygon(data = zemljevid %>% filter(long > -30) %>%
                                              left_join(skupine1, by = c("NAME_LONG" = "drzava")),
                                            aes(x = long, y = lat, group = group, 
-                                               fill = skupina)) +
+                                               fill = skupina)) + scale_fill_discrete(breaks = sort(skupine1$skupina)) +
   coord_map(xlim = c(-25, 40), ylim = c(32, 72))
 
