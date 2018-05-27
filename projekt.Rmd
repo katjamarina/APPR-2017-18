@@ -109,7 +109,7 @@ print(zemljevid.skupaj)
 source("analiza/analiza.r", encoding = "UTF-8")
 ```
 
-Ker me je zanimala povezava med odstotkom BDP-ja posamezne države, vloženim v visokošolstvo, in deležem zaposlovanja, sem ta dva podatka za leto 2015 združila v tabelo in z metodo clusteringa države razdelila v štiri skupine, in iz tega poskušala razbrati, kako sta ti dve spremenljivki povezani. Prvi graf spodaj prikazuje, kako je clustering države razdelil po skupinah.
+Ker me je zanimala povezava med odstotkom BDP-ja posamezne države, vloženim v visokošolstvo, in deležem zaposlovanja, sem ta dva podatka za leto 2015 združila v tabelo in z metodo clusteringa države razdelila v štiri skupine. Iz tega sem poskušala razbrati, kako sta ti dve spremenljivki povezani. Prvi graf spodaj prikazuje, kako je clustering države razdelil po skupinah.
 
 ```{r razdelitev, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 print(razdelitev)
